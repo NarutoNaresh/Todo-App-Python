@@ -1,11 +1,11 @@
-FROM python:3.8 AS stage1
+FROM python:3.10-slim AS stage1
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 COPY . .
 RUN pip install -r requirement.txt
 RUN python manage.py migrate
 
-FROM python:3.7-slim AS build-image
+FROM python:3.10-slim AS runner
 COPY --from=stage1 /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 ENTRYPOINT [ "python" ]
