@@ -1,13 +1,26 @@
+# Build stage
 FROM python:3.10-slim AS build
+
+# Create a virtual environment
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
-COPY . .
+
+# Set work directory
+WORKDIR /app
+COPY requirement.txt .
 RUN pip install -r requirement.txt
+COPY . .
 RUN python manage.py migrate
 
+# Final stage
 FROM python:3.10-slim
+# Copy the virtual environment from the build stage
 COPY --from=build /opt/venv /opt/venv
+# Set the environment variable
 ENV PATH="/opt/venv/bin:$PATH"
-RUN ls -ltra
-ENTRYPOINT [ "python" ]
-CMD [ "manage.py", "runserver", "0.0.0.0:8000" ]
+# Set work directory
+WORKDIR /app
+COPY --from=build /app /app
+EXPOSE 8000
+ENTRYPOINT ["python"]
+CMD ["manage.py", "runserver", "0.0.0.0:8000"]
