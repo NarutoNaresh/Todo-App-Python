@@ -50,7 +50,7 @@ pipeline {
                 '''
                 
                 // Update the deployment file with the new Docker image tag
-                sh 'sed -i "s@narutonaresh/todoappmain:.*\\\$@$NEW_IMG:$IMG_TAG@" Deployapp.yml'
+                sh 'sed -i "s@narutonaresh/todoappmain:.*\\\$@$NEW_IMG:$IMG_TAG@" Todo-App-Python/Deployapp.yml'
 
                 // Stage and commit the updated deployment file
                 sh '''
@@ -69,7 +69,7 @@ pipeline {
                         // Configure Git with user information for commits
                         sh 'git config --global user.name "naresh kumar d"'
                         // Update the remote repository URL to use the GitHub token
-                        sh 'git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/NarutoNaresh/Project-Manifests.git'
+                        sh "git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/NarutoNaresh/Project-Manifests.git"
                         
                         // Push the committed changes to the remote repository
                         sh 'git push origin main'
